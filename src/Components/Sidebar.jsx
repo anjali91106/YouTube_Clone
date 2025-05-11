@@ -14,7 +14,7 @@ const Sidebar = () => {
   ];
 
   return (
-    <aside className="w-60 bg-white h-screen shadow-lg p-4 mt-8">
+    <aside className="w-60 bg-white h-screen shadow-lg p-4 mt-14">
       <div className="flex flex-col space-y-4">
         {menuItems.map((item, index) =>
           item.isLink ? (

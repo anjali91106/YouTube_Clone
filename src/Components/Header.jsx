@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 export default function YouTubeHeader() {
   const [search, setSearch] = useState('');
   const [isClicked, setIsClicked] = useState(false);
+  const [isUser, setIsUser] = useState("hello");
 
   function handleClick() {
     setIsClicked(prev => !prev);
@@ -59,7 +60,7 @@ export default function YouTubeHeader() {
 
       {/* Icons */}
       <div className="flex items-center space-x-4 text-gray-600">
-         <Link to="/signin">SignIn</Link>
+         <Link to="/signin" setIsUser={setIsUser}>SignIn <h2>{isUser}</h2></Link>
         <User size={20} className="cursor-pointer" />
       </div>
     </header>
