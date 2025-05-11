@@ -1,5 +1,6 @@
 import express from "express";
 // import SampleVideo from "./Model/videos.model.js";
+import { routes } from "./Routes/videos.routes.js";
 
 import dbConnect from "./Config/dbConnect.js";
 import dotenv from "dotenv"
@@ -9,6 +10,9 @@ console.log("Hello from server");
 dbConnect();
 
 const app = express();
+app.use(express.json());
+
+routes(app);
 
 app.listen(process.env.PORT, () => {
     console.log(`SERVER IS CONNECTED AT PORT : ${process.env.PORT}`);
