@@ -1,6 +1,7 @@
 import express from "express";
 // import SampleVideo from "./Model/videos.model.js";
 import { routes } from "./Routes/videos.routes.js";
+import cors from "cors"
 
 import dbConnect from "./Config/dbConnect.js";
 import dotenv from "dotenv"
@@ -11,6 +12,9 @@ dbConnect();
 
 const app = express();
 app.use(express.json());
+
+//using cors for different localhost ports 
+app.use(cors());
 
 routes(app);
 
