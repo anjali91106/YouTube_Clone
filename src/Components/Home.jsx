@@ -1,5 +1,7 @@
 import { Fragment, useEffect, useState } from "react";
 import axios from "axios";
+import FilterButtons from "./FilterButtons";
+import { Link } from 'react-router-dom';
 
 const Home = () => {
   const [videos, setVideos] = useState([])
@@ -18,11 +20,13 @@ const Home = () => {
 
     fetchData();
   }, []);
+  console.log("Videos data:", videos);
 
   console.log("Api", Api);
   return (
     <Fragment>
-      <div style={{ display: "flex", flexWrap: "wrap", gap: "20px" }}>
+      <FilterButtons/>
+      <div style={{ display: "flex", flexWrap: "wrap", gap: "20px", justifyContent: "space-evenly" }}>
         {videos.map((video, index) => (
           <div
             key={index}
@@ -35,17 +39,34 @@ const Home = () => {
               fontFamily: "sans-serif",
             }}
           >
-            <a href={video.videoUrl} target="_blank" rel="noopener noreferrer">
+            {/* <a href={video.videoUrl} target="_blank" rel="noopener noreferrer">
               <img
                 src={video.thumbnailUrl}
                 alt={video.title}
                 style={{ width: "100%", height: "auto" }}
               />
-            </a>
+            </a> */}
+           <div className="w-auto h-auto">
+             <iframe
+              width="100%"
+              height="315"
+              src={video.videoUrl.replace("watch?v=", "embed/")}
+              title={video.title}
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+            ></iframe>
+           </div>
+
+             {/* <video src="https://www.youtube.com/watch?v=bMknfKXIFA8" alt="your video is not supporated by the browser">
+              
+             </video> */}
+
             <div style={{ padding: "10px" }}>
-              <h3 style={{ fontSize: "18px", margin: "10px 0" }}>
+              <Link to={`/videopage/${index}`}>
+               <h3 style={{ fontSize: "18px", margin: "10px 0" }} className="hover:text-blue-950 hover:underline">
                 {video.title}
               </h3>
+              </Link>
               <p style={{ fontSize: "14px", margin: "5px 0", color: "#555" }}>
                 <strong>Uploader:</strong> {video.uploader}
               </p>

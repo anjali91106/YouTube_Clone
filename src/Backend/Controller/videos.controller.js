@@ -13,6 +13,23 @@ export const allVideosData = (req, res) => {
 }
 
 
+export const videoById = (req, res) => {
+  try {
+    const id = req.params.id; 
+
+    SampleVideo.findById(id).then((data) => {
+      if (!data) {
+        return res.status(404).json({ message: "Video with the given id not found" });
+      }
+
+      res.json(data);
+    }).catch((err) => {
+      res.status(500).json({ message: "Internal Server Error", error: err.message });
+    });
+  } catch (err) {
+    res.status(500).json({ message: "Internal Server Error", error: err.message });
+  }
+};
 
 
 
