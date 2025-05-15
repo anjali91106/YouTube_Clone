@@ -5,6 +5,7 @@ import cors from "cors"
 
 import dbConnect from "./Config/dbConnect.js";
 import dotenv from "dotenv"
+import { commentRoute } from "./Routes/comments.route.js";
 dotenv.config();
 
 console.log("Hello from server");
@@ -17,6 +18,7 @@ app.use(express.json());
 app.use(cors());
 
 routes(app);
+commentRoute(app);
 
 app.listen(process.env.PORT, () => {
     console.log(`SERVER IS CONNECTED AT PORT : ${process.env.PORT}`);

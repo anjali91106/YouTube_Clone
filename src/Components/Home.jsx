@@ -43,7 +43,7 @@ const Home = () => {
              <iframe
               width="100%"
               height="315"
-              src={video.videoUrl.replace("watch?v=", "embed/")}
+              src={video.videoUrl?.replace("watch?v=", "embed/")}
               title={video.title}
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               allowFullScreen
@@ -59,7 +59,7 @@ const Home = () => {
                 <strong>Uploader:</strong> {video.uploader}
               </p>
               <p style={{ fontSize: "14px", margin: "5px 0", color: "#555" }}>
-                <strong>Views:</strong> {video.views.toLocaleString()}
+                <strong>Views:</strong> {video.views?.toLocaleString()}
               </p>
               <p style={{ fontSize: "14px", margin: "5px 0", color: "#555" }}>
                 <strong>Uploaded on:</strong> {video.uploadDate}
