@@ -1,145 +1,171 @@
-import { useEffect, useState } from "react"
+import { useEffect, useState } from "react";
 import axios from "axios";
-import Buttons from "./Buttons";
 
 const Comments = () => {
-   return (
-    <> 
-      <Addcomment/>
-      <UpdateComments/>
-      <DeleteComments/>
-      <AllComments/>
-    </>
-   )
-}
-
-export const Addcomment = () => {
-  const [text, setText] = useState("");
-    const [comments, setComments] = useState([]);
-    const Api = "http://localhost:8080/addcomment"
-
-    const handleAddComment = async (e) => {
-        e.preventDefault();
-        console.log("comment posted")
-
-        if(!text.trim()) return;
-
-        const newComment = {
-                commentId: "comment" + Math.floor(Math.random() * 10000),
-                userId: "user" + Math.floor(Math.random() * 10000),
-                text: text,
-                timestamp: new Date().toISOString()
-        }
-
-         try {
-            const res = await axios.post(Api, newComment);
-            console.log("server Response", res.data)
-
-            // Add the new comment to the top
-            setComments(prev => [res.data, ...prev]);
-            setText(''); // Clear input
-            } catch (err) {
-               console.log("Error posting comment:", err);
-            }
-    }
   return (
-    <div>
-        <form onSubmit={handleAddComment}>
-             <input
-                value={text}
-                onChange={(e) => setText(e.target.value)}
-                placeholder="Add a comment..."
-                className="border rounded-lg p-2 m-2"
-            />
-        <button
-          type="submit"
-          className="self-end px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
-        >
-          Post Comment
-        </button>
-        </form>
-             
-
-            <div className="mt-6 space-y-4">
-            {comments.map((c, index) => (
-          <div key={index} className="p-3 border rounded-lg shadow-sm bg-gray-100 m-2">
-            <div className="flex">
-              <Buttons/>
-              <button className="border rounded p-2">edit</button>
-            </div> 
-            <h4 className="text-sm font-semibold">{c.userId}</h4>
-            <p className="text-sm font-semibold">{c.commentId}</p>
-            <p className="text-gray-800">{c.text}</p>
-            <p className="text-sm text-gray-500">{new Date(c.timestamp).toLocaleString()}</p>
-          </div>
-        ))}
-      </div>
+    <div className="max-w-2xl mx-auto p-4">
+      <AddComment />
+      <AllComments />
     </div>
-  )
-}
+  );
+};
 
-export const UpdateComments = () => {
-    const Api = "http://localhost:8080/comment/:commentId"
+export const AddComment = () => {
+  const [text, setText] = useState("");
+  const [comments, setComments] = useState([]);
+  const Api = "http://localhost:8080/addcomment";
 
-    useEffect(() => {
-      const update = async () => {
-       let res = await axios.put()
-      }
-    },[])
+  const handleAdd = async (e) => {
+    e.preventDefault();
+    if (!text.trim()) return;
 
-    return (
-      <>
-      
-      </>
-    )
-}
+    const newComment = {
+      commentId: "comment" + Math.floor(Math.random() * 10000),
+      userId: "user" + Math.floor(Math.random() * 10000),
+      text: text,
+      timestamp: new Date().toISOString(),
+    };
 
-export const DeleteComments = () => {
-  const Api = "http://localhost:8080/comment/:commentId"
+    try {
+      const res = await axios.post(Api, newComment);
+      setComments((prev) => [res.data, ...prev]);
+      setText("");
+    } catch (err) {
+      console.log("Error posting comment:", err);
+    }
+  };
 
   return (
     <>
-    
+      <form onSubmit={handleAdd} className="flex flex-col sm:flex-row gap-2 mb-6">
+        <input
+          value={text}
+          onChange={(e) => setText(e.target.value)}
+          placeholder="Add a comment..."
+          className="flex-1 border rounded-lg p-2"
+        />
+        <button
+          type="submit"
+          className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+        >
+          Post
+        </button>
+      </form>
+
+      <div className="space-y-4">
+        {comments.map((c) => (
+          <CommentCard key={c.commentId} comment={c} />
+        ))}
+      </div>
     </>
-  )
-}
+  );
+};
 
 export const AllComments = () => {
   const [comm, setComm] = useState([]);
-  const Api = "http://localhost:8080/comments"
+  const Api = "http://localhost:8080/comments";
 
   useEffect(() => {
-     const fetchComments = async () => {
-      try{
-         let res = await axios.get(Api);
-        setComm(res.data)
-      }catch(err){
-        console.log("Some Error Occured when fetching the comments", err);
+    const fetchComments = async () => {
+      try {
+        let res = await axios.get(Api);
+        setComm(res.data);
+      } catch (err) {
+        console.log("Error fetching comments:", err);
       }
-     }
+    };
 
-     fetchComments()
-  },[])
+    fetchComments();
+  }, []);
 
   return (
+    <div className="space-y-4">
+      {comm.map((comment) => (
+        <CommentCard key={comment.commentId} comment={comment} />
+      ))}
+    </div>
+  );
+};
+
+const CommentCard = ({ comment }) => {
+  return (
+    <div className="p-4 border rounded-lg shadow bg-white flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2">
+      <div className="flex-1">
+        <p className="text-sm font-semibold">{comment.userId}</p>
+        <p className="text-sm font-semibold">{comment.commentId}</p>
+        <p className="text-xs text-gray-500">
+          {new Date(comment.timestamp).toLocaleString()}
+        </p>
+        <p className="text-gray-800 mt-1">{comment.text}</p>
+      </div>
+      <div className="flex gap-2">
+        <UpdateComments commentId={comment.commentId} existingText={comment.text} />
+        <DeleteComments commentId={comment.commentId} />
+      </div>
+    </div>
+  );
+};
+
+export const UpdateComments = ({ commentId, existingText }) => {
+  const [isUpdate, setIsUpdate] = useState(false);
+  const [updatedComment, setUpdatedComment] = useState(existingText);
+  const Api = `http://localhost:8080/comment/${commentId}`;
+
+  const handleSave = async () => {
+    try {
+      await axios.put(Api, { text: updatedComment });
+      console.log("Updated successfully");
+      setIsUpdate(false);
+    } catch (err) {
+      console.error("Update failed:", err);
+    }
+  };
+
+  return isUpdate ? (
     <>
-      <div className="space-y-3">
-            {comm.map((comment, index) => (
-              <div key={index} className="p-3 border rounded-lg shadow-sm bg-gray-100 m-2">
-              <div className="flex">
-                  <Buttons/>
-                  <button className="border rounded p-2 hover:bg-blue-700">edit</button>
-              </div>
-                <h4 className="font-semibold text-sm">{comment.userId}</h4>
-                <h4 className="font-semibold text-sm">{comment.commentId}</h4>
-                <p className="text-sm">{comment.text}</p>
-                <p className="text-xs text-gray-500">{comment.timestamp}</p>
-              </div>
-            ))}
-          </div>
+      <input
+        value={updatedComment}
+        onChange={(e) => setUpdatedComment(e.target.value)}
+        className="border p-1 rounded text-sm"
+      />
+      <button
+        onClick={handleSave}
+        className="bg-green-600 text-white px-2 py-1 rounded text-sm hover:bg-green-700"
+      >
+        Save
+      </button>
     </>
-  )
-}
+  ) : (
+    <button
+      onClick={() => setIsUpdate(true)}
+      className="bg-blue-600 text-white px-2 py-1 rounded text-sm hover:bg-blue-700"
+    >
+      Edit
+    </button>
+  );
+};
 
+export const DeleteComments = ({ commentId }) => {
+  const Api = `http://localhost:8080/comment/${commentId}`;
 
-export default Comments
+  const handleDelete = async () => {
+    try {
+      await axios.delete(Api);
+      console.log("Deleted");
+      window.location.reload(); // Refresh to reflect deletion
+    } catch (error) {
+      console.error("Delete failed:", error);
+    }
+  };
+
+  return (
+    <button
+      onClick={handleDelete}
+      className="bg-red-600 text-white px-2 py-1 rounded text-sm hover:bg-red-700"
+    >
+      Delete
+    </button>
+  );
+};
+
+export default Comments;
