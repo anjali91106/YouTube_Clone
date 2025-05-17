@@ -1,12 +1,34 @@
+import axios from "axios";
 import { Fragment, useState } from "react";
 import { Link } from "react-router-dom";
 
-const SignIn = ({setIsUser}) => {
-    const [user, setUser] = useState("");
-    function handleSubmit(e){
-        e.preventDefault();
-        setIsUser(user);
+const SignIn = () => {
+  const [usernameInput, setUsernameInput] = useState("");
+  const [loggedInUser, setLoggedInUser] = useState(null);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const Api = "http://localhost:8080/user/signup";
+
+  async function handleSubmit(e) {
+    e.preventDefault();
+
+    const newUser = {
+      email: email,
+      user: usernameInput,
+      password: password,
+    };
+
+    try {
+      const res = await axios.post(Api, newUser);
+
+      // assuming the API returns the full user object:
+      setLoggedInUser(res.data.user || usernameInput);
+      console.log(loggedInUser, "username")
+    } catch (err) {
+      console.error("Login error", err);
     }
+  }
+
   return (
     <Fragment>
       <div className="flex items-center justify-center min-h-screen bg-gray-100">
@@ -24,27 +46,36 @@ const SignIn = ({setIsUser}) => {
           <form className="space-y-4" onSubmit={handleSubmit}>
             <input
               type="email"
+              value={email}
+              onChange={(e) => {
+                setEmail(e.target.value);
+              }}
               placeholder="Email or phone"
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
             />
             <input
               type="text"
               placeholder="User-Name"
-              onChange={(e) => {setUser(e.target.value)}}
+              value={usernameInput}
+              onChange={(e) => setUsernameInput(e.target.value)}
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
             />
             <input
               type="password"
+              value={password}
+              onChange={(e) => {
+                setPassword(e.target.value);
+              }}
               placeholder="Password"
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
             />
             <Link to="/">
-               <button
-              type="submit"
-              className="w-full bg-red-500 hover:bg-red-600 text-white font-semibold py-2 rounded-lg transition"
-            >
-              Sign in
-            </button>
+              <button
+                type="submit"
+                className="w-full bg-red-500 hover:bg-red-600 text-white font-semibold py-2 rounded-lg transition"
+              >
+                {loggedInUser ? `Welcome, ${loggedInUser}` : "Sign in"}
+              </button>
             </Link>
           </form>
 

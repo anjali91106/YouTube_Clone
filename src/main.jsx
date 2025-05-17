@@ -6,6 +6,7 @@ import {createBrowserRouter, RouterProvider } from "react-router-dom"
 import Home from './Components/Home.jsx'
 import SignIn from './Components/SignIn.jsx'
 import VideoPage from './Components/VideoPage.jsx'
+import Channel from './Components/Channel.jsx'
 
 const appRouter = createBrowserRouter([
   {
@@ -21,6 +22,9 @@ const appRouter = createBrowserRouter([
       },{
         path: "/videopage/:id",
         element: <VideoPage/>
+      },{
+        path: "/channelpage",
+        element: <Channel/>
       }
     ]
   }

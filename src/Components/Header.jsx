@@ -1,11 +1,10 @@
 import { useEffect, useState } from 'react';
-import { Search, User, Menu } from 'lucide-react';
+import { Search, User, Menu , BadgePlus} from 'lucide-react';
 import { Link } from 'react-router-dom';
 import Sidebar from './Sidebar';
 
 const Header = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const [userName] = useState('Hello'); // If this won't change, no need for setState
 
   const toggleSidebar = () => setIsSidebarOpen(prev => !prev);
 
@@ -39,8 +38,11 @@ const Header = () => {
         <div className="flex items-center space-x-4 text-gray-600">
           <Link to="/signin" className="flex items-center space-x-1 hover:underline">
             <span>Sign In</span>
-            <span>{userName}</span>
           </Link>
+          <Link to="/channelpage" className="flex items-center space-x-1 hover:underline">
+            <h2>Create</h2><BadgePlus/>
+          </Link>
+        
           <User size={20} className="cursor-pointer" />
         </div>
       </header>
