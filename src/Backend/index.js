@@ -5,6 +5,7 @@ import dbConnect from "./Config/dbConnect.js";
 import dotenv from "dotenv"
 import { commentRoute } from "./Routes/comments.route.js";
 import { userRoutes } from "./Routes/user.routes.js";
+import channelRoutes from "./Routes/channel.routes.js";
 dotenv.config();
 
 console.log("Hello from server");
@@ -20,6 +21,7 @@ app.use(cors());
 routes(app);
 commentRoute(app);
 userRoutes(app);
+channelRoutes(app);
 
 const PORT = process.env.PORT || 7000
 

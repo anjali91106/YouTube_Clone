@@ -34,3 +34,46 @@ export const allStaticData = (req, res) => {
   }).catch(err => res.status(500)
   .json({message: "Internal server Error" || console.log(err.message) }));
 }
+
+//updating the video
+
+export const updateVideo = async (req, res) => {
+  const { id } = req.params; // assuming you're sending the video _id
+  const { imageUrl, uploaddate, uploader, title } = req.body;
+
+  try {
+    const updatedVideo = await staticVideo.findByIdAndUpdate(
+      id,
+      { imageUrl, uploaddate, uploader, title },
+      { new: true } // return the updated document
+    );
+
+    if (!updatedVideo) {
+      return res.status(404).json({ message: "Video not found" });
+    }
+
+    res.json({ message: "Video updated successfully", updatedVideo });
+  } catch (err) {
+    res.status(500).json({ message: "Error updating video", error: err });
+  }
+};
+
+// deleting a video
+
+export const deleteVideo = async (req, res) => {
+  const { id } = req.params; // assuming you're deleting by _id
+
+  try {
+    const deletedVideo = await staticVideo.findByIdAndDelete(id);
+
+    if (!deletedVideo) {
+      return res.status(404).json({ message: "Video not found" });
+    }
+
+    res.json({ message: "Video deleted successfully", deletedVideo });
+  } catch (err) {
+    res.status(500).json({ message: "Error deleting video", error: err });
+  }
+};
+
+
