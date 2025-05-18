@@ -1,33 +1,24 @@
 import axios from "axios";
 import { Fragment, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Link } from "react-router-dom";
 
-const SignIn = () => {
-  const [usernameInput, setUsernameInput] = useState("");
-  const [loggedInUser, setLoggedInUser] = useState(null);
+const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
-  const Api = "http://localhost:8080/user/signup";
+  const Api = "http://localhost:8080/user/login";
 
   async function handleSubmit(e) {
     e.preventDefault();
 
     const newUser = {
       email: email,
-      username: usernameInput,
       password: password,
     };
 
     try {
       const res = await axios.post(Api, newUser);
-
-      // assuming the API returns the full user object:
-      const userNameFromResponse = res.data.username || usernameInput;
-      setLoggedInUser(userNameFromResponse);
-
-      console.log("User logged in:", userNameFromResponse);
+      console.log(res, "login user")
       navigate("/")
     } catch (err) {
       console.error("Login error", err);
@@ -44,7 +35,7 @@ const SignIn = () => {
               alt="YouTube Logo"
               className="h-10 mb-6"
             />
-            <h2 className="text-2xl font-semibold mb-2">Sign Up</h2>
+            <h2 className="text-2xl font-semibold mb-2">Log In</h2>
             <p className="text-sm text-gray-600 mb-6">to continue to YouTube</p>
           </div>
 
@@ -56,13 +47,6 @@ const SignIn = () => {
                 setEmail(e.target.value);
               }}
               placeholder="Email or phone"
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
-            />
-            <input
-              type="text"
-              placeholder="User-Name"
-              value={usernameInput}
-              onChange={(e) => setUsernameInput(e.target.value)}
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
             />
             <input
@@ -79,26 +63,15 @@ const SignIn = () => {
                 type="submit"
                 className="w-full bg-red-500 hover:bg-red-600 text-white font-semibold py-2 rounded-lg transition"
               >
-                signIn
+                login
               </button>
            
           </form>
 
-          <h1 className="m-2">If Already have an Account login</h1>
-          <Link to="/login" className="p-2 mr-2.5 bg-red-500 hover:bg-red-600 text-white font-semibold py-2 rounded-lg transition">login</Link>
-
-          <div className="flex justify-between items-center mt-6 text-sm text-gray-600">
-            <a href="#" className="hover:underline">
-              Need help?
-            </a>
-            <a href="#" className="text-blue-600 hover:underline">
-              Create account
-            </a>
-          </div>
         </div>
       </div>
     </Fragment>
   );
 };
 
-export default SignIn;
+export default Login;

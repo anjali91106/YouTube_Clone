@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
 import { Search, User, Menu , BadgePlus} from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Sidebar from './Sidebar';
 
 const Header = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-
+  const navigate = useNavigate();
   const toggleSidebar = () => setIsSidebarOpen(prev => !prev);
 
   return (
@@ -35,14 +35,16 @@ const Header = () => {
         {/* Center section: Search */}
         <SearchBar/>
 
-        <div className="flex items-center space-x-4 text-gray-600">
-          <Link to="/signin" className="flex items-center space-x-1 hover:underline">
-            <span>Sign In</span>
-          </Link>
+       <div className="flex items-center space-x-4 text-gray-600">
+          <button onClick={() => navigate("/signin")} className="hover:underline">
+            Sign Up
+          </button>
+
           <Link to="/channelpage" className="flex items-center space-x-1 hover:underline">
-            <h2>Create</h2><BadgePlus/>
+            <h2>Create</h2>
+            <BadgePlus />
           </Link>
-        
+
           <User size={20} className="cursor-pointer" />
         </div>
       </header>
