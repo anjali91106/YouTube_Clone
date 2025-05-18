@@ -9,7 +9,7 @@ export function routes(app){
     //to add the static side videos
     app.post("/staticVideo", addData);
     app.get("/staticVideo", allStaticData)
-    app.put("/staticVideo/:id", updateVideo);
-    app.delete("/staticVideo/:id", deleteVideo)
+    app.put('/staticVideo/:id', updateVideo);
+    app.delete('/staticVideo/:id', deleteVideo)
 }
 

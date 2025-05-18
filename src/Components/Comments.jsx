@@ -10,6 +10,8 @@ const Comments = () => {
   );
 };
 
+//add comment
+
 export const AddComment = () => {
   const [text, setText] = useState("");
   const [comments, setComments] = useState([]);
@@ -61,11 +63,13 @@ export const AddComment = () => {
   );
 };
 
+//printing alll comments
+
 export const AllComments = () => {
   const [comm, setComm] = useState([]);
   const Api = "http://localhost:8080/comments";
 
-  useEffect(() => {
+  
     const fetchComments = async () => {
       try {
         let res = await axios.get(Api);
@@ -75,19 +79,22 @@ export const AllComments = () => {
       }
     };
 
+    useEffect(() => {
+
     fetchComments();
   }, []);
 
   return (
     <div className="space-y-4">
       {comm.map((comment) => (
-        <CommentCard key={comment.commentId} comment={comment} />
+        <CommentCard key={comment.commentId} comment={comment} onUpdate={fetchComments}/>
       ))}
     </div>
   );
 };
 
-const CommentCard = ({ comment }) => {
+//comment ui structure
+const CommentCard = ({ comment, onUpdate }) => {
   return (
     <div className="p-4 border rounded-lg shadow bg-white flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2">
       <div className="flex-1">
@@ -99,14 +106,16 @@ const CommentCard = ({ comment }) => {
         <p className="text-gray-800 mt-1">{comment.text}</p>
       </div>
       <div className="flex gap-2">
-        <UpdateComments commentId={comment.commentId} existingText={comment.text} />
-        <DeleteComments commentId={comment.commentId} />
+        <UpdateComments commentId={comment._id} existingText={comment.text} onUpdate={onUpdate}/>
+        <DeleteComments commentId={comment._id} onUpdate={onUpdate}/>
       </div>
     </div>
   );
 };
 
-export const UpdateComments = ({ commentId, existingText }) => {
+//update a comment
+
+export const UpdateComments = ({ commentId, existingText, onUpdate }) => {
   const [isUpdate, setIsUpdate] = useState(false);
   const [updatedComment, setUpdatedComment] = useState(existingText);
   const Api = `http://localhost:8080/comment/${commentId}`;
@@ -116,10 +125,12 @@ export const UpdateComments = ({ commentId, existingText }) => {
       await axios.put(Api, { text: updatedComment });
       console.log("Updated successfully");
       setIsUpdate(false);
+      onUpdate()
     } catch (err) {
       console.error("Update failed:", err);
     }
   };
+
 
   return isUpdate ? (
     <>
@@ -145,14 +156,16 @@ export const UpdateComments = ({ commentId, existingText }) => {
   );
 };
 
-export const DeleteComments = ({ commentId }) => {
+//delete a comment
+
+export const DeleteComments = ({ commentId, onUpdate }) => {
   const Api = `http://localhost:8080/comment/${commentId}`;
 
   const handleDelete = async () => {
     try {
       await axios.delete(Api);
       console.log("Deleted");
-      window.location.reload(); // Refresh to reflect deletion
+      onUpdate() // Refresh to reflect deletion
     } catch (error) {
       console.error("Delete failed:", error);
     }

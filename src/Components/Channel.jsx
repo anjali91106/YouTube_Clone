@@ -27,10 +27,6 @@ const Channel = () => {
     // You can handle form submission logic here
   };
 
-  const handleClick = () => {
-    setIsClicked(true);
-  };
-
   return (
     <div>
       {isClicked ? (
@@ -66,7 +62,7 @@ const Channel = () => {
                 <textarea
                   name="description"
                   value={formData.description}
-                  onChange={handleChange}
+                  onChange={()=>{setIsClicked(true)}}
                   rows="4"
                   className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-400"
                 />
@@ -108,7 +104,7 @@ const Channel = () => {
               <button
                 type="submit"
                 className="w-full bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded-lg transition duration-300"
-                onClick={handleClick}
+                onClick={()=>{setIsClicked(true)}}
               >
                 Create Channel
               </button>
@@ -126,18 +122,20 @@ export const ChannelVideos = ({name}) => {
   const [staticVideo, setStaticVideo] = useState([]);
   const Api = "http://localhost:8080/staticVideo";
 
-  useEffect(() => {
-    async function fetchVideo() {
-      try {
-        const response = await axios.get(Api);
-        setStaticVideo(response.data);
-        console.log(response.data);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    }
-    fetchVideo();
-  }, []);
+  const fetchVideo = async () => {
+  try {
+    const response = await axios.get(Api);
+    setStaticVideo(response.data);
+    console.log(response.data[0]._id, "staticVideo")
+  } catch (error) {
+    console.error("Error fetching data:", error);
+  }
+};
+
+useEffect(() => {
+  fetchVideo();
+}, []);
+
 
   return (
     <div className="bg-white min-h-screen p-4">
@@ -148,6 +146,7 @@ export const ChannelVideos = ({name}) => {
           alt="Channel Banner"
           className="w-28 h-28 rounded-full object-cover border"
         />
+        <h1>{name}</h1>
         <div>
         <h1 className="text-2xl font-bold">{name}</h1>
           <p className="text-sm text-gray-600">896K subscribers</p>
@@ -170,6 +169,10 @@ export const ChannelVideos = ({name}) => {
               <h2 className="font-semibold text-lg">{video.title}</h2>
               <p className="text-sm text-gray-600">{video.uploader}</p>
               <p className="text-sm text-gray-400">{video.uploaddate}</p>
+              <div className="flex gap-2 mt-2">
+                <UpdateVideo videoId={video._id} video={video} onUpdate={fetchVideo}/>
+                <DeleteVideo videoId={video._id} onDelete={fetchVideo} />
+              </div>
             </div>
           </div>
         ))}
@@ -177,5 +180,73 @@ export const ChannelVideos = ({name}) => {
     </div>
   );
 };
+
+//updating a video 
+
+export const UpdateVideo = ({ videoId, onUpdate, video }) => {
+  const [isUpdate, setIsUpdate] = useState(false);
+  const [updatedTitle, setUpdatedTitle] = useState(video.title);
+  const updateApi = `http://localhost:8080/staticVideo/${videoId}`;
+
+  const handleSave = async () => {
+    try {
+      await axios.put(updateApi, { ...video, title: updatedTitle });
+      console.log("Updated successfully");
+      setIsUpdate(false);
+      onUpdate(); // re-fetch videos
+    } catch (err) {
+      console.error("Update failed:", err);
+    }
+  };
+
+  return isUpdate ? (
+    <>
+      <input
+        value={updatedTitle}
+        onChange={(e) => setUpdatedTitle(e.target.value)}
+        className="border p-1 rounded text-sm"
+      />
+      <button
+        onClick={handleSave}
+        className="bg-green-600 text-white px-2 py-1 rounded text-sm hover:bg-green-700"
+      >
+        Save
+      </button>
+    </>
+  ) : (
+    <button
+      onClick={() => setIsUpdate(true)}
+      className="bg-blue-600 text-white px-2 py-1 rounded text-sm hover:bg-blue-700"
+    >
+      Edit
+    </button>
+  );
+}; 
+
+//deleting a video
+
+export const DeleteVideo = ({ videoId, onDelete }) => {
+  const deleteApi = `http://localhost:8080/staticVideo/${videoId}`;
+
+  const handleDelete = async () => {
+    try {
+      await axios.delete(deleteApi);
+      console.log("Deleted successfully");
+      onDelete(); // re-fetch videos
+    } catch (error) {
+      console.error("Delete failed:", error);
+    }
+  };
+
+  return (
+    <button
+      onClick={handleDelete}
+      className="bg-red-600 text-white px-2 py-1 rounded text-sm hover:bg-red-700"
+    >
+      Delete
+    </button>
+  );
+};
+
 
 export default Channel;

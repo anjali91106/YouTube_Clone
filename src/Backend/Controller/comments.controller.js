@@ -39,10 +39,10 @@ export const addComments = (req, res) => {
 //to delete a comment
 
 export const deleteComment = async (req, res) => {
-  const { commentId } = req.params;
+  const { id } = req.params;
 
   try {
-    const deleted = await commentModel.findOneAndDelete({ commentId });
+    const deleted = await commentModel.findByIdAndDelete(id);
 
     if (!deleted) {
       return res.status(404).json({ message: "Comment not found" });
@@ -57,12 +57,12 @@ export const deleteComment = async (req, res) => {
 //to update a comment 
 
 export const updateComment = async (req, res) => {
-  const { commentId } = req.params;
+  const { id } = req.params;
   const { text } = req.body;
 
   try {
-    const updated = await commentModel.findOneAndUpdate(
-      { commentId },
+    const updated = await commentModel.findByIdAndUpdate(
+      { id },
       { text, timestamp: new Date().toISOString() },
       { new: true } // return the updated document
     );

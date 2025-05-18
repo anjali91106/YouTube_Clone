@@ -29,6 +29,7 @@ app.listen(PORT, () => {
     console.log(`SERVER IS CONNECTED AT PORT : ${PORT}`);
 })
 
+
 //checking if the data is getiing fetched or not 
 // const videos = await SampleVideo.find();
 // console.log(videos);

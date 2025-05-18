@@ -3,7 +3,7 @@ import { addComments, deleteComment, fetchComments, updateComment } from "../Con
 export function commentRoute(app){
     app.get("/comments", fetchComments);
     app.post("/addcomment", addComments);
-    app.put("/comment/:commentId", updateComment);
-    app.delete("/comment/:commentId", deleteComment);
+    app.put('/comment/:id', updateComment);
+    app.delete('/comment/:id', deleteComment);
 }
 
