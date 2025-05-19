@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { Search, User, Menu, BadgePlus } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import Sidebar from "./Sidebar";
+import { handleSuccess } from "../utils";
+import { ToastContainer } from "react-toastify";
 
 const Header = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -10,9 +12,23 @@ const Header = () => {
 
   //authenticating after user is logged in
   useEffect(() => {
-    setLoggedInUser(localStorage.getItem("loggedInUser"));
+    setLoggedInUser(localStorage.getItem('loggedInUser'));
+    console.log(loggedInUser)
   }, []);
   const toggleSidebar = () => setIsSidebarOpen((prev) => !prev);
+
+
+  //handle logout user
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('loggedInUser');
+
+    handleSuccess('User logged out')
+
+    setTimeout(() => {
+      navigate('/login')
+    },1000)
+  }
 
   return (
     <>
@@ -57,22 +73,27 @@ const Header = () => {
           )}
 
           {loggedInUser && (
-            <Link
+            <div>
+              <Link className="flex items-center space-x-1 hover:underline"
               to="/channelpage"
-              className="flex items-center space-x-1 hover:underline"
             >
               <h2>Create</h2>
               <BadgePlus />
             </Link>
-          )}
+             <button onClick={handleLogout} className="hover:underline">LogOut</button>
+            </div>
+           )} 
 
           <User size={20} className="cursor-pointer" />
           <h1>{loggedInUser}</h1>
         </div>
       </header>
+      <ToastContainer/>
     </>
   );
 };
+
+//search bar but its not working right now !!
 
 const SearchBar = () => {
   const [search, setSearch] = useState("");
