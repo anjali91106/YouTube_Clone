@@ -22,13 +22,9 @@ This is a full-stack YouTube clone application built with **React**, **Node.js**
   - Comment on videos
   - Subscribe / unsubscribe to channels
 
-- 🔍 **Search and Filter**
-  - Search for videos by title or keyword
-  - Filter videos by categories or channels
-
 - 👤 **Channel Pages**
   - Each user has a personal channel
-  - Display uploaded videos, channel info, and subscriber count
+  - Display uploaded videos, channel info
 
 - 🧭 **Navigation & Routing**
   - Clean and smooth routing using **React Router**
