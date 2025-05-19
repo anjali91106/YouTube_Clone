@@ -61,7 +61,6 @@ const Channel = () => {
                 </label>
                 <textarea
                   name="description"
-                  required
                   value={formData.description}
                   onChange={()=>{setIsClicked(true)}}
                   rows="4"

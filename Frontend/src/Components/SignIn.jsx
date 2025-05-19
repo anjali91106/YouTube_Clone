@@ -2,14 +2,16 @@ import axios from "axios";
 import { Fragment, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
+import {ToastContainer} from 'react-toastify'
+import { handleError, handleSuccess } from "../utils";
+
 
 const SignIn = () => {
   const [usernameInput, setUsernameInput] = useState("");
-  const [loggedInUser, setLoggedInUser] = useState(null);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
-  const Api = "http://localhost:8080/user/signup";
+  const Api = 'http://localhost:8080/user/signup';
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -20,17 +22,20 @@ const SignIn = () => {
       password: password,
     };
 
+    if(!email || !usernameInput || !password){
+      return handleError('username, email and password is required to signUp!')
+    }
+
     try {
       const res = await axios.post(Api, newUser);
+      // console.log(res.data)
+      handleSuccess(res.data.message)
 
-      // assuming the API returns the full user object:
-      const userNameFromResponse = res.data.username || usernameInput;
-      setLoggedInUser(userNameFromResponse);
-
-      console.log("User logged in:", userNameFromResponse);
-      navigate("/")
+      setTimeout(() => {
+        navigate("/login")
+      }, 2000);
     } catch (err) {
-      console.error("Login error", err);
+      handleError(err);
     }
   }
 
@@ -79,13 +84,13 @@ const SignIn = () => {
                 type="submit"
                 className="w-full bg-red-500 hover:bg-red-600 text-white font-semibold py-2 rounded-lg transition"
               >
-                signIn
+                signUp
               </button>
-           
+              <h1 className="m-2">If Already have an Account login</h1>
+              <Link to="/login" className="p-2 mr-2.5 bg-red-500 hover:bg-red-600 text-white font-semibold py-2 rounded-lg transition">login</Link>
           </form>
 
-          <h1 className="m-2">If Already have an Account login</h1>
-          <Link to="/login" className="p-2 mr-2.5 bg-red-500 hover:bg-red-600 text-white font-semibold py-2 rounded-lg transition">login</Link>
+          <ToastContainer/>
 
           <div className="flex justify-between items-center mt-6 text-sm text-gray-600">
             <a href="#" className="hover:underline">

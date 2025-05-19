@@ -2,27 +2,34 @@ import { Fragment, useEffect, useState } from "react";
 import axios from "axios";
 import FilterButtons from "./FilterButtons";
 import { Link } from 'react-router-dom';
+import { ToastContainer } from "react-toastify";
+import { handleError } from "../utils";
 
 const Home = () => {
   const [videos, setVideos] = useState([])
-  let Api = "http://localhost:8080/videos";
 
+  //fetching all the video from database
   useEffect(() => {
     async function fetchData() {
       try {
-        const response = await axios.get(Api);
+        let Api = "http://localhost:8080/videos";
+        const token = localStorage.getItem('token')
+        const response = await axios.get(Api,
+          {
+        headers: {
+          Authorization: `Bearer ${token}`,  // <-  token 
+        },
+      });
         setVideos(response.data)
-        console.log(response.data);
+        // console.log(response.data);
       } catch (error) {
-        console.error("Error fetching data:", error);
+        handleError(error)
       }
     }
 
     fetchData();
   }, []);
-  console.log("Videos data:", videos);
-
-  console.log("Api", Api);
+  
   return (
     <Fragment>
       <FilterButtons/>
@@ -68,6 +75,7 @@ const Home = () => {
           </div>
         ))}
       </div>
+      <ToastContainer/>
     </Fragment>
   );
 };

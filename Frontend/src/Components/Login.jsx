@@ -1,6 +1,9 @@
 import axios from "axios";
 import { Fragment, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
+import { handleSuccess, handleError } from "../utils";
+import {ToastContainer} from 'react-toastify'
+
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -16,10 +19,25 @@ const Login = () => {
       password: password,
     };
 
+    if(!email || !password){
+          return handleError('username, email and password is required to signUp!')
+        }
+
     try {
       const res = await axios.post(Api, newUser);
-      console.log(res, "login user")
-      navigate("/")
+      //taking the token from the response 
+      const jwtToken = res.data.token;
+      const username = res.data.username;
+      handleSuccess(res.data.message)
+      
+      //saving the token and username into localstorage 
+      localStorage.setItem('token', jwtToken);
+      localStorage.setItem('loggedInUser', username)
+      
+      //navigating to home page after successfully login
+      setTimeout(() => {
+        navigate("/")
+      }, 1000);
     } catch (err) {
       console.error("Login error", err);
     }
@@ -65,8 +83,13 @@ const Login = () => {
               >
                 login
               </button>
+
+              <h1 className="m-2">If Dosen't have an Account login</h1>
+              <Link to="/signup" className="p-2 mr-2.5 bg-red-500 hover:bg-red-600 text-white font-semibold py-2 rounded-lg transition">signUp</Link>
            
           </form>
+
+          <ToastContainer/>
 
         </div>
       </div>
