@@ -2,20 +2,19 @@ import axios from "axios";
 import { Fragment, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
-import {ToastContainer} from 'react-toastify'
+import { ToastContainer } from "react-toastify";
 import { handleError, handleSuccess } from "../utils";
-
 
 const SignIn = () => {
   const [usernameInput, setUsernameInput] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
-  const Api = 'http://localhost:8080/user/signup';
+  const Api = "http://localhost:8080/user/signup";
 
-  // form subbmission 
+  // form subbmission
   async function handleSubmit(e) {
-    e.preventDefault(); 
+    e.preventDefault();
 
     // making new user
     const newUser = {
@@ -26,21 +25,25 @@ const SignIn = () => {
 
     // ck=hecking all the important fileds are ther
 
-    if(!email || !usernameInput || !password){
-      return handleError('username, email and password is required to signUp!')
+    if (!email || !usernameInput || !password) {
+      return handleError("username, email and password is required to signUp!");
     }
 
     try {
       // sending the new user into database using api
       const res = await axios.post(Api, newUser);
       // console.log(res.data)
-      handleSuccess(res.data.message)
+      handleSuccess(res.data.message);
 
       setTimeout(() => {
-        navigate("/login")
+        navigate("/login");
       }, 2000);
     } catch (err) {
-      handleError(err);
+      if (err.response && err.response.data && err.response.data.message) {
+        handleError(err.response.data.message);
+      } else {
+        handleError("An unexpected error occurred. Please try again.");
+      }
     }
   }
 
@@ -84,18 +87,23 @@ const SignIn = () => {
               placeholder="Password"
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
             />
-            
-              <button
-                type="submit"
-                className="w-full bg-red-500 hover:bg-red-600 text-white font-semibold py-2 rounded-lg transition"
-              >
-                signUp
-              </button>
-              <h1 className="m-2">If Already have an Account login</h1>
-              <Link to="/login" className="p-2 mr-2.5 bg-red-500 hover:bg-red-600 text-white font-semibold py-2 rounded-lg transition">login</Link>
+
+            <button
+              type="submit"
+              className="w-full bg-red-500 hover:bg-red-600 text-white font-semibold py-2 rounded-lg transition"
+            >
+              signUp
+            </button>
+            <h1 className="m-2">If Already have an Account login</h1>
+            <Link
+              to="/login"
+              className="p-2 mr-2.5 bg-red-500 hover:bg-red-600 text-white font-semibold py-2 rounded-lg transition"
+            >
+              login
+            </Link>
           </form>
 
-          <ToastContainer/>
+          <ToastContainer />
 
           <div className="flex justify-between items-center mt-6 text-sm text-gray-600">
             <a href="#" className="hover:underline">

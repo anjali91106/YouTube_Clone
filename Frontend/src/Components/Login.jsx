@@ -85,8 +85,8 @@ const Login = () => {
                 login
               </button>
 
-              <h1 className="m-2">If Dosen't have an Account login</h1>
-              <Link to="/signup" className="p-2 mr-2.5 bg-red-500 hover:bg-red-600 text-white font-semibold py-2 rounded-lg transition">signUp</Link>
+              <h1 className="m-2">If Dosen't have an Account Signup</h1>
+              <Link to="/signin" className="p-2 mr-2.5 bg-red-500 hover:bg-red-600 text-white font-semibold py-2 rounded-lg transition">signUp</Link>
            
           </form>
 
