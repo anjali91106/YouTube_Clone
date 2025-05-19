@@ -5,10 +5,10 @@ import verifyAuthentication from "../Middleware/verify.middleware.js";
 
 export function routes(app){
     // jwt token check
-    app.get("/videos",verifyAuthentication, allVideosData); //can not video yt video before login 
-    app.get("/videopage/:id", videoById);
+    app.get("/videos",verifyAuthentication, allVideosData); //can not fetch yt video before login 
+    app.get("/videopage/:id", videoById); //video showing by id
 
-    //to add the static side videos
+    //to add the static side videos // in channel page also used these routes 
     app.post("/staticVideo", addData);
     app.get("/staticVideo", allStaticData)
     app.put('/staticVideo/:id', updateVideo);

@@ -30,9 +30,6 @@ app.listen(PORT, () => {
 })
 
 
-//checking if the data is getiing fetched or not 
-// const videos = await SampleVideo.find();
-// console.log(videos);
 
 
 

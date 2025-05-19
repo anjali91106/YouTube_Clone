@@ -72,6 +72,8 @@ const Header = () => {
             </button>
           )}
 
+          {/* if user is loged in show create channel button and logout button */}
+
           {loggedInUser && (
             <div>
               <Link className="flex items-center space-x-1 hover:underline"

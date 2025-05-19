@@ -12,6 +12,7 @@ export const allVideosData = (req, res) => {
   .json({message: "Internal server Error" || console.log(err.message) }));
 }
 
+// fetching one video by id
 
 export const videoById = (req, res) => {
   try {

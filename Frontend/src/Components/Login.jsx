@@ -11,6 +11,7 @@ const Login = () => {
   const navigate = useNavigate();
   const Api = "http://localhost:8080/user/login";
 
+  // form subbmission handling
   async function handleSubmit(e) {
     e.preventDefault();
 

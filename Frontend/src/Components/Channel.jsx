@@ -11,6 +11,8 @@ const Channel = () => {
     profileImage: null,
   });
 
+// handle 
+
   const handleChange = (e) => {
     const { name, value, files } = e.target;
     if (name === "profileImage") {
@@ -24,13 +26,13 @@ const Channel = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // You can handle form submission logic here
+    // can handle form submission logic here
   };
 
   return (
     <div>
       {isClicked ? (
-        // showing the channel page when the form is subbmited
+        // showing the channel video component when the form is subbmited
         <div>
           <ChannelVideos name={name}/>
         </div>

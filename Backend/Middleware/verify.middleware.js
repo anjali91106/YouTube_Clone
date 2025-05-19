@@ -1,10 +1,11 @@
 import jwt from "jsonwebtoken"
 
 const verifyAuthentication = (req, res, next) => {
-     const authHeader = req.headers['authorization'];
+    // checking the token validation 
+     const authHeader = req.headers['authorization']; //getting it from the headers section
 
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
-        return res.status(401).json({ message: 'Unauthorized, JWT token is required' });
+        return res.status(401).json({ message: 'Unauthorized, JWT token is required' }); //cheking it 
     }
 
     const token = authHeader.split(' ')[1]; // Extract token after "Bearer"

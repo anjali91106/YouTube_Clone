@@ -1,10 +1,12 @@
 import joi from "joi"
 
 export const signUpVerification = (req, res, next) => {
+    // adding signup varification 
     const Schema = joi.object({
-        username: joi.string().min(3).max(100).required(),
-        email: joi.string().email().required(),
-        password: joi.string().required()
+        // all three are required
+        username: joi.string().min(3).max(100).required(), //user name should be in the length of 3 to 100
+        email: joi.string().email().required(), //a valid email 
+        password: joi.string().min(3).max(100).required() //password should be in the length of 3 to 100
     })
 
     const {error} = Schema.validate(req.body);
@@ -19,9 +21,10 @@ export const signUpVerification = (req, res, next) => {
 
 
 export const logInVerification = (req, res, next) => {
+    // login lavidation
     const Schema = joi.object({
-        email: joi.string().email().required(),
-        password: joi.string().required()
+        email: joi.string().email().required(), //email required with proper form
+        password: joi.string().min(3).max(100).required() //password should be in the length of 3 to 100
     })
 
     const {error} = Schema.validate(req.body);

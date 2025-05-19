@@ -16,6 +16,7 @@ const FilterButtons = () => {
     'New to you'
   ];
 
+  // these filter buttons are static 
   return (
     <div className="flex items-center space-x-2 overflow-x-auto py-4 px-4 hide-scrollbar">
       {filters.map((filter) => (

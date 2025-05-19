@@ -32,7 +32,8 @@ const Home = () => {
   
   return (
     <Fragment>
-      <FilterButtons/>
+      {/* filter buttons are static */}
+      <FilterButtons/> 
       <div style={{ display: "flex", flexWrap: "wrap", gap: "20px", justifyContent: "space-evenly" }}>
         {videos.map((video, index) => (
           <div

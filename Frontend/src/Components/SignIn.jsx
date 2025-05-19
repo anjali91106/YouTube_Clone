@@ -13,20 +13,25 @@ const SignIn = () => {
   const navigate = useNavigate();
   const Api = 'http://localhost:8080/user/signup';
 
+  // form subbmission 
   async function handleSubmit(e) {
-    e.preventDefault();
+    e.preventDefault(); 
 
+    // making new user
     const newUser = {
       email: email,
       username: usernameInput,
       password: password,
     };
 
+    // ck=hecking all the important fileds are ther
+
     if(!email || !usernameInput || !password){
       return handleError('username, email and password is required to signUp!')
     }
 
     try {
+      // sending the new user into database using api
       const res = await axios.post(Api, newUser);
       // console.log(res.data)
       handleSuccess(res.data.message)

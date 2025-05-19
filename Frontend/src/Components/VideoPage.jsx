@@ -2,14 +2,13 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Comments from "./Comments";
-import Buttons from "./Buttons";
 
 const VideoPage = () => {
   const { id } = useParams();
   const [video, setVideo] = useState([]);
-  const [videoComments, setVideoComments] = useState([]);
   const Api = `http://localhost:8080/videopage/${id}`;
  
+  // fetching the video that is clicked by its id and showing its data
   useEffect(() => {
     async function fetchVideoById() {
       try {
@@ -20,17 +19,6 @@ const VideoPage = () => {
         console.error("Error fetching data:", error);
       }
     }
-
-    async function fetchComments() {
-      try {
-        const response = await axios.get(Api);
-        setVideoComments(response.data.comments);
-      } catch (err) {
-        console.log("Some Error occured when fetching the comments");
-      }
-    }
-
-    fetchComments();
 
     fetchVideoById();
   }, [id]);
@@ -63,7 +51,8 @@ const VideoPage = () => {
           </p>
           <p className="text-sm text-gray-700 mb-2">
             <strong>Uploaded on:</strong> {video.uploadDate}
-          </p>
+          </p>  
+        {/* showing all the comments */}
 
           <Comments/>
           
@@ -76,10 +65,13 @@ const VideoPage = () => {
   );
 };
 
+// side videos for better looking UI they are static dose not play
+
 export function StaticVideo() {
   const [staticVideo, setStaticVideo] = useState([]);
   const Api = "http://localhost:8080/staticVideo";
 
+  // fetching the already added video from the database
   useEffect(() => {
     async function fetchVideo() {
       try {

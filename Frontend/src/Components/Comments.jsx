@@ -1,11 +1,14 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { ToastContainer } from "react-toastify";
+import Buttons from "./Buttons";
 
 const Comments = () => {
   return (
     <div className="max-w-2xl mx-auto p-4">
       <AddComment />
       <AllComments />
+      <ToastContainer/>
     </div>
   );
 };
@@ -21,6 +24,7 @@ export const AddComment = () => {
     e.preventDefault();
     if (!text.trim()) return;
 
+    //creating a new comment
     const newComment = {
       commentId: "comment" + Math.floor(Math.random() * 10000),
       userId: "user" + Math.floor(Math.random() * 10000),
@@ -33,7 +37,7 @@ export const AddComment = () => {
       setComments((prev) => [res.data, ...prev]);
       setText("");
     } catch (err) {
-      console.log("Error posting comment:", err);
+      console.log(err, "can not post this comment Something went wrong")
     }
   };
 
@@ -70,6 +74,7 @@ export const AllComments = () => {
   const Api = "http://localhost:8080/comments";
 
   
+  //fetching all the comments from database 
     const fetchComments = async () => {
       try {
         let res = await axios.get(Api);
@@ -104,8 +109,10 @@ const CommentCard = ({ comment, onUpdate }) => {
           {new Date(comment.timestamp).toLocaleString()}
         </p>
         <p className="text-gray-800 mt-1">{comment.text}</p>
+        <Buttons/>
       </div>
       <div className="flex gap-2">
+        {/* adding the delete and update functionality into the comments */}
         <UpdateComments commentId={comment._id} existingText={comment.text} onUpdate={onUpdate}/>
         <DeleteComments commentId={comment._id} onUpdate={onUpdate}/>
       </div>
@@ -120,17 +127,19 @@ export const UpdateComments = ({ commentId, existingText, onUpdate }) => {
   const [updatedComment, setUpdatedComment] = useState(existingText);
   const Api = `http://localhost:8080/comment/${commentId}`;
 
+  //saving the new updated comment
   const handleSave = async () => {
     try {
       await axios.put(Api, { text: updatedComment });
       console.log("Updated successfully");
       setIsUpdate(false);
-      onUpdate()
+      onUpdate() //refetching the comments again // refresing the database
     } catch (err) {
       console.error("Update failed:", err);
     }
   };
 
+  //if edit button is clicked show save button and when save button is clicked show edit button
 
   return isUpdate ? (
     <>
@@ -161,6 +170,7 @@ export const UpdateComments = ({ commentId, existingText, onUpdate }) => {
 export const DeleteComments = ({ commentId, onUpdate }) => {
   const Api = `http://localhost:8080/comment/${commentId}`;
 
+  // deleting a comment
   const handleDelete = async () => {
     try {
       await axios.delete(Api);

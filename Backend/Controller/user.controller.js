@@ -2,16 +2,17 @@ import UserModel from "../Model/user.model.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
+// creating a user
 export const signUp = async (req, res) => {
   try {
     const { username, email, password } = req.body;
 
-    const existingUser = await UserModel.findOne({ email });
+    const existingUser = await UserModel.findOne({ email }); //checking if someone already have that email
     if (existingUser) {
       return res.status(400).json({ message: "User already exists with this email", success: false });
     }
 
-    const hashedPassword = await bcrypt.hash(password, 10);
+    const hashedPassword = await bcrypt.hash(password, 10); //hashing the password
 
     const newUser = new UserModel({
       username,
@@ -19,7 +20,7 @@ export const signUp = async (req, res) => {
       password: hashedPassword
     });
 
-    await newUser.save();
+    await newUser.save(); //saving 
 
     res.status(201).json({
       message: `User registered with username ${username}`,
@@ -36,10 +37,13 @@ export const signUp = async (req, res) => {
   }
 };
 
+
+// login user
+
 export const login = async (req, res) => {
   try {
     const { email, password } = req.body;
-    const user = await UserModel.findOne({ email });
+    const user = await UserModel.findOne({ email });  //checking if a user with given email exists
     const errMes = `Authentication failed email or password is wrong`
 
     if (!user) {
@@ -49,6 +53,7 @@ export const login = async (req, res) => {
         success: false });
     }
 
+    // if user with given email exists then check the password is correct or not
     const isMatched = await bcrypt.compare(password, user.password);
     if (!isMatched) {
       return res.status(403)
@@ -56,6 +61,8 @@ export const login = async (req, res) => {
         message: errMes,  
         success: false});
     }
+
+    // if password is correct then give the jwttoken 
 
     const token = jwt.sign(
       { _id: user._id, email: user.email },

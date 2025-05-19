@@ -4,6 +4,8 @@ import { ThumbsUp, ThumbsDown } from "lucide-react";
 const Buttons = () => {
     const [isLikeClicked, setIsLikeClicked] = useState(false);
     const [isDislikeClicked, setIsDislikeClicked] = useState(false);
+
+    // like and dislike buttons 
   return (
     <>
       <LikeButton 
@@ -19,6 +21,7 @@ const Buttons = () => {
 } 
 
 export const LikeButton = ({ isLikeClicked, setIsDislikeClicked, setIsLikeClicked}) => {
+  // if like is clicked dislike should not show if dislike is clicked like should not show
     function handleLike() {
     setIsLikeClicked(true);
     setIsDislikeClicked(false);
