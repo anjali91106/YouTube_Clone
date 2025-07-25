@@ -28,7 +28,7 @@ const Home = () => {
     }
 
     fetchData();
-  }, []);
+  }, [videos]);
   
   return (
     <Fragment>

@@ -15,6 +15,7 @@ const Header = () => {
     setLoggedInUser(localStorage.getItem("loggedInUser"));
     console.log(loggedInUser);
   }, []);
+  
   const toggleSidebar = () => setIsSidebarOpen((prev) => !prev);
 
   //handle logout user

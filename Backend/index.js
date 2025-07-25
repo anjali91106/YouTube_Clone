@@ -8,37 +8,30 @@ import { userRoutes } from "./Routes/user.routes.js";
 import channelRoutes from "./Routes/channel.routes.js";
 dotenv.config();
 
-console.log("Hello from server");
-dbConnect();
-
 const app = express();
 app.use(express.json());
-
-//using cors for different localhost ports 
 app.use(cors());
 
-//adding api routes
-routes(app);
-commentRoute(app);
-userRoutes(app);
-channelRoutes(app);
+// Connect to DB first, then seed, then start server
+const startServer = async () => {
+  try {
+    await dbConnect();       // Wait for MongoDB connection   
 
-const PORT = process.env.PORT || 7000
+    // Register API routes
+    routes(app);
+    commentRoute(app);
+    userRoutes(app);
+    channelRoutes(app);
 
-app.listen(PORT, () => {
-    console.log(`SERVER IS CONNECTED AT PORT : ${PORT}`);
-})
+    const PORT = process.env.PORT || 7000;
+    app.listen(PORT, () => {
+      console.log(`SERVER IS CONNECTED AT PORT : ${PORT}`);
+    });
+  } catch (err) {
+    console.error("Startup error:", err);
+  }
+};
 
-
-
-
-
-
-
-
-
-
-
-
+startServer(); 
 
 

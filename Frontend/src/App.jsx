@@ -1,11 +1,17 @@
 import { Outlet } from "react-router-dom";
-import Header from "./Components/Header";
+import { lazy, Suspense } from "react";
 
 const App = () => {
+
+  const Header = lazy(() => import('./Components/Header'))
+  
   return (
     <>
-     <Header/>
-     <Outlet/>
+    <Suspense fallback={<div>Loading...</div>}>
+       <Header/>
+        <Outlet/>
+    </Suspense>
+    
     </>
   )
 }
